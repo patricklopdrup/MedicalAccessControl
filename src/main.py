@@ -15,6 +15,9 @@ bob = User("Bob", 24, "00006")
 bob.add_to_role(Role.Patient)
 
 
+
+
+
 national_database.print_database()
 try:
     national_database.add_user(bob, test_user)

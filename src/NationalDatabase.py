@@ -51,8 +51,9 @@ class NationalDatabase():
             if record.cpr_number == user.cpr_number:
                 record.vaccinated = True
                 record.vaccination_date = date.today()
-                return
-
+                return True
+        print("User not found in database")
+        return False
 
     def print_database(self) -> str:
         print("\nNational Database:")
@@ -61,3 +62,19 @@ class NationalDatabase():
             count += 1
             print(f"{count}: {record} - Vaccine: {record.vaccinated}")
         
+    def get_test_result(self, user: User) -> TestResult:
+        for record in self.database:
+            if record.cpr_number == user.cpr_number:
+                return record.test_result
+        print("User not found in database")
+        return None
+
+    def get_vaccination_certificate(self, user: User) -> str:
+        for record in self.database:
+            if record.cpr_number == user.cpr_number:
+                if record.vaccinated:
+                    return f"{record.name} has been vaccinated on {record.vaccination_date}"
+                else:
+                    return f"{record.name} has not been vaccinated"
+        print("User not found in database")
+        return None
