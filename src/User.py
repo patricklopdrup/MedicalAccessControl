@@ -12,13 +12,6 @@ class User():
     def add_to_role(self, role: Role):
         self.role = role
 
-    def can_role_access_resource(self, role: Role, resource: Resource, access: Access) -> bool:
-        if role in access_control.access_list:
-            if resource in access_control.access_list[role]:
-                if access == Access.Write or access_control.access_list[role][resource] == access:
-                    return True
-        return False
-
     def can_access(self, resource: Resource, access: Access) -> bool:
         if self.role in access_control.access_list:
             if resource in access_control.access_list[self.role]:

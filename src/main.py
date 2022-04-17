@@ -14,17 +14,12 @@ test_user.add_to_role(Role.Patient)
 bob = User("Bob", 24, "00006")
 bob.add_to_role(Role.Patient)
 
-
-
-
-
-national_database.print_database()
 try:
-    national_database.add_user(bob, test_user)
+    national_database.add_user(bob, admin)
 except AccessControlException as e:
     print(e)
 
-#national_database.add_vaccination(bob, test_user)
-national_database.print_database()
+national_database.add_test(bob, admin, TestResult.Positive)
 
-#print(can_access(patrick, Resource.PandemicTest, Access.Read))
+
+national_database.print_database()
