@@ -1,10 +1,10 @@
 from NationalDatabase import *
 from AccessControl import *
+from Booking import *
 
 access_control = AccessControl()
 national_database = NationalDatabase()
-
-
+booking = Booking()
 
 
 admin = User("Admin", 30, "99999")
@@ -23,3 +23,6 @@ national_database.add_test(bob, admin, TestResult.Positive)
 
 
 national_database.print_database()
+
+
+booking.booking()  

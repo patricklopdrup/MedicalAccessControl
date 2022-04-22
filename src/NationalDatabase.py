@@ -3,6 +3,7 @@ from datetime import date
 from User import *
 from enum import Enum
 
+
 class TestResult(Enum):
     Positive = 0
     Negative = 1
