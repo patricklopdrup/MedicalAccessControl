@@ -1,5 +1,5 @@
 from AccessControl import *
-from datetime import date
+from datetime import date, timedelta
 from User import *
 from enum import Enum
 
@@ -18,7 +18,7 @@ class DatabaseObject():
         self.age = user.age
         self.cpr_number = user.cpr_number
         self.vaccinated = vaccinated
-        self.tested = tested
+        self.is_tested = tested
         self.test_result = test_result
         self.last_test_date = last_test_date
         self.vaccination_date = vaccination_date
@@ -66,13 +66,14 @@ class NationalDatabase():
         print("User not found in database")
         return False
 
-    def add_test(self, user: User, responsable: User, test_result: TestResult):
+    def add_test(self, user: User, responsable: User, test_result: TestResult,\
+                    date: date = date.today()):
         responsable.check_access_control(Resource.PandemicTest, Access.Write)
         for record in self.database:
             if record.cpr_number == user.cpr_number:
-                record.tested = True
+                record.is_tested = True
                 record.test_result = test_result
-                record.last_test_date = date.today()
+                record.last_test_date = date
                 return True
         print("User not found in database")
         return False
@@ -82,7 +83,7 @@ class NationalDatabase():
         count = 0
         for record in self.database:
             count += 1
-            print(f"{count}: {record} - Vaccine: {record.vaccinated} - Test: {record.tested}")
+            print(f"{count}: {record} - Vaccine: {record.vaccinated} - Test: {record.is_tested} - Test date: {record.last_test_date}")
         print()
 
     def get_vaccination_certificate(self, user: User) -> str:
@@ -101,3 +102,14 @@ class NationalDatabase():
                 return record.test_result
         print("User not found in database")
         return None
+
+    def get_infected_count_last_7_days(self) -> int:
+        infected_count = 0
+        for record in self.database:
+            if record.is_tested and record.test_result == TestResult.Positive:
+                if record.last_test_date >= self.days_ago(7):
+                    infected_count += 1
+        return infected_count
+
+    def days_ago(self, days) -> date:
+        return date.today() - timedelta(days=days)
