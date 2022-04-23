@@ -45,7 +45,17 @@ class NationalDatabase():
     def add_user(self, user_to_add: User, responsable: User):
         responsable.check_access_control(Resource.Database, Access.Write)
         self.database.append(DatabaseObject(user_to_add))
-
+        
+    def user_exists(self, user: User, responsable: User):
+        responsable.check_access_control(Resource.Database, Access.Write)
+    
+        for record in self.database:
+            if record.cpr_number == user.cpr_number:
+                print("User with this CPR already exists")
+                return True
+        return False
+        
+        
     def add_vaccination(self, user: User, responsable: User):
         responsable.check_access_control(Resource.VaccinationCertificate, Access.Write)
         for record in self.database:
@@ -72,7 +82,7 @@ class NationalDatabase():
         count = 0
         for record in self.database:
             count += 1
-            print(f"{count}: {record} - Vaccine: {record.vaccinated}")
+            print(f"{count}: {record} - Vaccine: {record.vaccinated} - Test: {record.tested}")
         print()
 
     def get_vaccination_certificate(self, user: User) -> str:
