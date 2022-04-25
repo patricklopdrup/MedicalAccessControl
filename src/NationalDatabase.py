@@ -1,7 +1,9 @@
+import imp
 from AccessControl import *
 from datetime import date, timedelta
 from User import *
 from enum import Enum
+import random
 
 
 class TestResult(Enum):
@@ -13,7 +15,7 @@ class TestResult(Enum):
 class DatabaseObject():
     def __init__(self, user: User, vaccinated: bool = False, tested: bool = False, \
                     test_result: TestResult = TestResult.Unknown,\
-                        last_test_date: date = None, vaccination_date: date = None):
+                        last_test_date: date = None,new_test_date: date = None, vaccination_date: date = None):
         self.name = user.name
         self.age = user.age
         self.cpr_number = user.cpr_number
@@ -21,6 +23,7 @@ class DatabaseObject():
         self.is_tested = tested
         self.test_result = test_result
         self.last_test_date = last_test_date
+        self.new_test_date = new_test_date
         self.vaccination_date = vaccination_date
 
     def __str__(self):
@@ -46,15 +49,26 @@ class NationalDatabase():
         responsable.check_access_control(Resource.Database, Access.Write)
         self.database.append(DatabaseObject(user_to_add))
         
-    def user_exists(self, user: User, responsable: User):
-        responsable.check_access_control(Resource.Database, Access.Write)
-    
+    def user_exists(self, user: User, responsible: User):
+        responsible.check_access_control(Resource.Database, Access.Write)
+        
         for record in self.database:
             if record.cpr_number == user.cpr_number:
                 print("User with this CPR already exists")
                 return True
         return False
+    
+    def new_test_user(self, user:User, responsible: User, date: date = date.today()):  
+          
+        responsible.check_access_control(Resource.PandemicTest, Access.Write)
+        for record in self.database:
+            if record.cpr_number == user.cpr_number:
+                record.new_test_date = date
+                return True
+        print("User not found in database")
+        return False
         
+          
         
     def add_vaccination(self, user: User, responsable: User):
         responsable.check_access_control(Resource.VaccinationCertificate, Access.Write)
@@ -83,7 +97,7 @@ class NationalDatabase():
         count = 0
         for record in self.database:
             count += 1
-            print(f"{count}: {record} - Vaccine: {record.vaccinated} - Test: {record.is_tested} - Test date: {record.last_test_date}")
+            print(f"{count}: {record} - CPR: {record.cpr_number} - Vaccine: {record.vaccinated} - Test: {record.is_tested} - Last test date: {record.last_test_date} - New test date: {record.new_test_date}")
         print()
 
     def get_vaccination_certificate(self, user: User) -> str:

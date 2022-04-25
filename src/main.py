@@ -1,3 +1,4 @@
+from cgi import test
 from NationalDatabase import *
 from AccessControl import *
 from Booking import *
@@ -8,9 +9,9 @@ national_database = NationalDatabase()
 booking = Booking()
 
 
-# admin = User("Admin", 30, "99999")
-# admin.add_to_role(Role.Admin)
-# test_user = User("Test", 24, "00005")
+admin = User("Admin", 30, "99999")
+admin.add_to_role(Role.Admin)
+# test_user = User("Test", 24, "000099")
 # test_user.add_to_role(Role.Patient)
 # bob = User("Bob", 24, "00006")
 # bob.add_to_role(Role.Patient)
@@ -30,5 +31,8 @@ national_database.print_database()
 infected = national_database.get_infected_count_last_7_days()
 print(infected)
 
+booking.booking()
+booking.booking_approvement(admin, national_database)
 
-#booking.booking()  
+
+
