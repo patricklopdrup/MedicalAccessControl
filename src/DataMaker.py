@@ -50,10 +50,15 @@ def create_user(index):
     age = random.randint(18, 80)
     return User(name, age, cpr)
 
+
 def add_test_for_user(user, admin, db):
     test_result = get_random_test_result()
     test_date = get_random_test_date()
     db.add_test(user, admin, test_result, test_date)
+    
+def add_new_test_for_user(user, admin, db):
+    test_date = get_random_new_test_date()
+    db.new_test_user(user, admin, test_date)
 
 def get_random_test_result():
     if random.randint(0, 10) <= 4:
@@ -65,6 +70,9 @@ def get_random_test_date():
     day_offset = random.randint(0, 14)
     return date.today() - timedelta(days=day_offset)
 
+def get_random_new_test_date():
+    day_offset = random.randint(0, 14)
+    return date.today() + timedelta(days=day_offset)
 
 if __name__ == "__main__":
     populate_database(6)
