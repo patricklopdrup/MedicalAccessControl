@@ -52,7 +52,7 @@ class Booking():
          
         for d in self.data:
             if d.appointment=='1':
-                print("You recieved a new booking for covid test!")
+                print("You recieved a new booking for Covid test!")
                 print()
                 print(f"User name: {d.name}" )
                 print(f"User age: {d.age}")
@@ -73,6 +73,32 @@ class Booking():
                 elif db.user_exists(user,admin) and approve == 'y':
                     try: 
                         add_new_test_for_user(user, admin, db)
+                        print()
+                        print("Old user was registered for the Covid test!")
+                        print()
+                    except AccessControlException as e:
+                        print(e)
+            elif d.appointment=='2':
+                print("You recieved a new booking for vaccination!")
+                print()
+                print(f"User name: {d.name}" )
+                print(f"User age: {d.age}")
+                print(f"User CPR: {d.cpr_number}")
+                print()
+                user=User(d.name,d.age,d.cpr_number)
+                user.add_to_role(Role.Patient)
+                approve = input("If the personal data is corect? y/n : ")
+                if not db.user_exists(user,admin) and approve == 'y':
+                    try: 
+                        db.add_user(user, admin)
+                        booked_vaccination_date(user, admin, db)  
+                        print("New user was registered for the vaccination!")
+                        print()
+                    except AccessControlException as e:
+                        print(e)
+                elif db.user_exists(user,admin) and approve == 'y':
+                    try: 
+                        booked_vaccination_date(user, admin, db)
                         print()
                         print("Old user was registered for the Covid test!")
                         print()

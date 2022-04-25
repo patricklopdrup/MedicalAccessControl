@@ -57,8 +57,12 @@ def add_test_for_user(user, admin, db):
     db.add_test(user, admin, test_result, test_date)
     
 def add_new_test_for_user(user, admin, db):
-    test_date = get_random_new_test_date()
+    test_date = get_random_new_future_date()
     db.new_test_user(user, admin, test_date)
+    
+def booked_vaccination_date(user, admin, db):
+    booked_date = get_random_new_future_date()
+    db.add_booked_vaccination_date(user, admin, booked_date)
 
 def get_random_test_result():
     if random.randint(0, 10) <= 4:
@@ -70,7 +74,7 @@ def get_random_test_date():
     day_offset = random.randint(0, 14)
     return date.today() - timedelta(days=day_offset)
 
-def get_random_new_test_date():
+def get_random_new_future_date():
     day_offset = random.randint(0, 14)
     return date.today() + timedelta(days=day_offset)
 
