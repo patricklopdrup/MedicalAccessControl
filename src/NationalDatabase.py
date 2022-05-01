@@ -58,6 +58,12 @@ class NationalDatabase():
                 print("User with this CPR already exists")
                 return True
         return False
+
+    
+    def get_user_by_cpr(self, cpr: str) -> User:
+        for u in self.database:
+            if u.cpr_number == cpr:
+                return u
     
     def new_test_user(self, user:User, responsible: User, date: date = date.today()):  
           
@@ -73,8 +79,12 @@ class NationalDatabase():
         responsable.check_access_control(Resource.VaccinationCertificate, Access.Write)
         for record in self.database:
             if record.cpr_number == user.cpr_number:
+                if record.vaccinated:
+                    print('Patient already vaccinated!')
+                    return False
                 record.vaccinated = True
                 record.vaccination_date = date.today()
+                print('Vaccination added!')
                 return True
         print("User not found in database")
         return False

@@ -61,7 +61,7 @@ class Booking():
                 user=User(d.name,d.age,d.cpr_number)
                 user.add_to_role(Role.Patient)
                 
-                approve = input("If the personal data is corect? y/n : ")
+                approve = input("Is the personal data is corect? y/n : ")
                 if not db.user_exists(user,admin) and approve == 'y':
                     try: 
                         db.add_user(user, admin)

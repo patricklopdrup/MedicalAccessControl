@@ -45,6 +45,25 @@ class AccessControl():
                 Resource.VaccinationCertificate: Access.Read
             }
         }
+    
+    def print_roles(self):
+        for role in self.access_list:
+            print(f'({role.value}) {role.name}')
+
+    def print_admin_actions(self):
+        for res, ac in self.access_list[Role.Admin].items():
+            print(f'({res.value}) {ac.name} {res.name}')
+    def print_doctor_actions(self):
+        pass
+
+    def print_nurse_actions(self):
+        pass
+
+    def print_researches_actions(self):
+        pass
+
+    def print_patient_actions(self):
+        pass
 
 
 class AccessControlException(Exception):
