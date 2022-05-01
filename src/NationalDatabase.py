@@ -64,6 +64,7 @@ class NationalDatabase():
         for u in self.database:
             if u.cpr_number == cpr:
                 return u
+        print('User does not exist')
     
     def new_test_user(self, user:User, responsible: User, date: date = date.today()):  
           
@@ -118,12 +119,17 @@ class NationalDatabase():
             print(f"{count}: {record} - CPR: {record.cpr_number} - Vaccine: {record.vaccinated} - Vaccination date: {record.vaccination_date} - Booked vaccination date: {record.booked_vaccination_date} - Test: {record.is_tested} - Last test date: {record.last_test_date} - New test date: {record.new_test_date}")
         print()
 
-    def get_vaccination_certificate(self, user: User) -> str:
+    def get_vaccination_certificate(self, patient: User, user: User) -> str:
+        if user.role == Role.Patient and user.cpr_number != patient.cpr_number:
+            print('As a patient you can only check your own vaccination status!')
+            return None
         for record in self.database:
-            if record.cpr_number == user.cpr_number:
+            if record.cpr_number == patient.cpr_number:
                 if record.vaccinated:
+                    print(f"{record.name} has been vaccinated on {record.vaccination_date}")
                     return f"{record.name} has been vaccinated on {record.vaccination_date}"
                 else:
+                    print(f"{record.name} has not been vaccinated")
                     return f"{record.name} has not been vaccinated"
         print("User not found in database")
         return None
@@ -141,6 +147,7 @@ class NationalDatabase():
             if record.is_tested and record.test_result == TestResult.Positive:
                 if record.last_test_date >= self.days_ago(7):
                     infected_count += 1
+        print(f'In the last seven days there have been {infected_count} infected people.')
         return infected_count
 
     def days_ago(self, days) -> date:

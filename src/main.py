@@ -1,4 +1,6 @@
 from cgi import test
+from cmath import e
+from pydoc import doc
 from NationalDatabase import *
 from AccessControl import *
 from Booking import *
@@ -12,6 +14,18 @@ def main():
 
     admin = User("Admin", 30, "99999")
     admin.add_to_role(Role.Admin)
+
+    doctor = User("Doctor", 30, "99998")
+    doctor.add_to_role(Role.Doctor)
+
+    nurse = User("Nurse", 30, "99997")
+    nurse.add_to_role(Role.Nurse)
+
+    researcher = User("Researcher", 30, "99996")
+    researcher.add_to_role(Role.Researcher)
+
+    patient = User("Patient", 30, "000099")
+    patient.add_to_role(Role.Patient)
     # test_user = User("Test", 24, "000099")
     # test_user.add_to_role(Role.Patient)
     # bob = User("Bob", 24, "00006")
@@ -29,42 +43,59 @@ def main():
 
     national_database.print_database()
 
-    infected = national_database.get_infected_count_last_7_days()
-    print(infected)
+
 
 
     while(True):
         print("Choose your role:")
         access_control.print_roles()
         option = input('>')
+        role = patient
         if option == '0':
-            while(True):
-                access_control.print_admin_actions()
-                admin_option = input('>')
-                if admin_option == '0':
-                    print('Enter cpr for patient:')
-                    cpr = input('>')
-                    user = national_database.get_user_by_cpr(cpr)
-                    national_database.add_vaccination(user, admin)
-                elif admin_option == '1':
-                    pass
-                elif admin_option == '2':
-                    pass
-                elif admin_option == 'quit':
-                    break
+            role == admin
         elif option == '1':
-            pass
+            role == doctor
         elif option == '2':
-            pass
+            role == nurse
         elif option == '3':
-            pass
+            role == researcher
         elif option == '4':
-            booking.booking()
-            booking.booking_approvement(admin, national_database)
+            role == patient
         elif option == 'quit':
             break
         else:
             print('Unknown Command')
+        while(True):
+            access_control.print_all_actions()
+            action = input('>')
+            if action == '0':
+                while(True):
+                    access_control.print_io()
+                    ac = input('>')
+                    if ac == '0':
+                        print('Enter cpr for patient:')
+                        cpr = input('>')
+                        user = national_database.get_user_by_cpr(cpr)
+                        national_database.get_vaccination_certificate(user, role)
+                    elif ac == '1':             
+                        print('Enter cpr for patient:')
+                        cpr = input('>')
+                        user = national_database.get_user_by_cpr(cpr)
+                        national_database.add_vaccination(user, role)
+                    elif ac == 'quit':
+                        break
+            elif action == '1':
+                pass
+            elif action == '2':
+                pass
+            elif action == '3':
+                booking.booking()
+                booking.booking_approvement(admin, national_database)
+            elif action == '4':
+                infected = national_database.get_infected_count_last_7_days()
+            elif action == 'quit':
+                break
+
 
 
 if __name__ == '__main__':
