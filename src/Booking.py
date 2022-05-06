@@ -44,10 +44,7 @@ class Booking():
         print()
         
         self.data=[BookingObject(User(name,age,cpr_number),appointment)]
-        
        
-       
-        
     def booking_approvement(self, admin: User, db:NationalDatabase) :
          
         for d in self.data:
@@ -65,19 +62,22 @@ class Booking():
                 if not db.user_exists(user,admin) and approve == 'y':
                     try: 
                         db.add_user(user, admin)
-                        add_new_test_for_user(user, admin, db)  
+                        book_test_date(user, admin, db)  
                         print("New user was registered for the Covid test!")
                         print()
                     except AccessControlException as e:
                         print(e)
+                        print("New user wasn`t registered for the Covid test!")
+
                 elif db.user_exists(user,admin) and approve == 'y':
                     try: 
-                        add_new_test_for_user(user, admin, db)
+                        book_test_date(user, admin, db)
                         print()
                         print("Old user was registered for the Covid test!")
                         print()
                     except AccessControlException as e:
                         print(e)
+                        print("Old user wasn`t registered for the Covid test!")
             elif d.appointment=='2':
                 print("You recieved a new booking for vaccination!")
                 print()
@@ -94,6 +94,7 @@ class Booking():
                         booked_vaccination_date(user, admin, db)  
                         print("New user was registered for the vaccination!")
                         print()
+                        print("New user wasn`t registered for the vaccination!")
                     except AccessControlException as e:
                         print(e)
                 elif db.user_exists(user,admin) and approve == 'y':
@@ -102,6 +103,7 @@ class Booking():
                         print()
                         print("Old user was registered for the Covid test!")
                         print()
+                        print("Old user wasn`t registered for the Covid test!")
                     except AccessControlException as e:
                         print(e)
                        

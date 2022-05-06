@@ -56,9 +56,9 @@ def add_test_for_user(user, admin, db):
     test_date = get_random_test_date()
     db.add_test(user, admin, test_result, test_date)
     
-def add_new_test_for_user(user, admin, db):
+def book_test_date(user, admin, db):
     test_date = get_random_new_future_date()
-    db.new_test_user(user, admin, test_date)
+    db.add_booked_test_date(user, admin, test_date)
     
 def booked_vaccination_date(user, admin, db):
     booked_date = get_random_new_future_date()

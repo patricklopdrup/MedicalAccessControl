@@ -66,8 +66,7 @@ class NationalDatabase():
                 return u
         print('User does not exist')
     
-    def new_test_user(self, user:User, responsible: User, date: date = date.today()):  
-          
+    def add_booked_test_date(self, user:User, responsible: User, date: date = date.today()):     
         responsible.check_access_control(Resource.PandemicTest, Access.Write)
         for record in self.database:
             if record.cpr_number == user.cpr_number:
