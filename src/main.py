@@ -1,3 +1,4 @@
+from ast import Return
 from cgi import test
 from cmath import e
 from pydoc import doc
@@ -26,6 +27,7 @@ def main():
 
     patient = User("Patient", 30, "000099")
     patient.add_to_role(Role.Patient)
+    
     # test_user = User("Test", 24, "000099")
     # test_user.add_to_role(Role.Patient)
     # bob = User("Bob", 24, "00006")
@@ -43,24 +45,21 @@ def main():
 
     national_database.print_database()
 
-
-
-
     while(True):
         print("Choose your role:")
         access_control.print_roles()
         option = input('>')
         role = patient
         if option == '0':
-            role == admin
+            role = admin
         elif option == '1':
-            role == doctor
+            role = doctor
         elif option == '2':
-            role == nurse
+            role = nurse
         elif option == '3':
-            role == researcher
+            role = researcher
         elif option == '4':
-            role == patient
+            role = patient
         elif option == 'quit':
             break
         else:
@@ -90,11 +89,10 @@ def main():
                 pass
             elif action == '3':
                 booking.booking()
-                booking.booking_approvement(admin, national_database)
-                print()
             elif action == '4':
+                booking.booking_approvement(role, national_database)
+            elif action == '5':
                 infected = national_database.get_infected_count_last_7_days()
-                print()
             elif action == 'quit':
                 break
 

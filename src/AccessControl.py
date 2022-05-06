@@ -58,7 +58,8 @@ class AccessControl():
         for res, ac in self.access_list[Role.Admin].items():
             print(f'({res.value}) Read/{ac.name} {res.name}')
         print(f'({res.value + 1}) Booking')
-        print(f'({res.value + 2}) Statistics')
+        print(f'({res.value + 2}) Add booking')
+        print(f'({res.value + 3}) Statistics')
 
 
 class AccessControlException(Exception):

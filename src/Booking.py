@@ -9,7 +9,6 @@ access_control = AccessControl()
 national_database = NationalDatabase()
 
 
-
 class BookingObject():
     def __init__(self, user: User, appointment: int):
         self.name = user.name
@@ -17,8 +16,7 @@ class BookingObject():
         self.cpr_number = user.cpr_number
         self.appointment = appointment
         
-        
-   
+     
 class Booking():
     
     def __init__(self):
@@ -26,7 +24,7 @@ class Booking():
         
          
     def booking(self)->str:
-        
+        print()
         print("Book your appointment:")
         booking ={
             1: "test",
@@ -45,83 +43,41 @@ class Booking():
         
         self.data=[BookingObject(User(name,age,cpr_number),appointment)]
        
-    def booking_approvement(self, admin: User, db:NationalDatabase) :
-         
+    def booking_approvement(self, role: User, db:NationalDatabase):
+        if hasattr(self.data,'appointment')== False:
+            print()
+            print('You have no new appointment!')
+            print()
+            return None
         for d in self.data:
+            print()
+            print("You recieved a new booking for Covid test!")
+            print()
+            print(f"User name: {d.name}" )
+            print(f"User age: {d.age}")
+            print(f"User CPR: {d.cpr_number}")
+            print()
+            user=User(d.name,d.age,d.cpr_number)
+            user.add_to_role(Role.Patient)
+            approve = input("Is the personal data is corect? y/n : ")  
             if d.appointment=='1':
-                print("You recieved a new booking for Covid test!")
-                print()
-                print(f"User name: {d.name}" )
-                print(f"User age: {d.age}")
-                print(f"User CPR: {d.cpr_number}")
-                print()
-                user=User(d.name,d.age,d.cpr_number)
-                user.add_to_role(Role.Patient)
-                
-                approve = input("Is the personal data is corect? y/n : ")
-                if not db.user_exists(user,admin) and approve == 'y':
-                    try: 
-                        db.add_user(user, admin)
-                        book_test_date(user, admin, db)  
-                        print("New user was registered for the Covid test!")
-                        print()
-                    except AccessControlException as e:
-                        print(e)
-                        print("New user wasn`t registered for the Covid test!")
-
-                elif db.user_exists(user,admin) and approve == 'y':
-                    try: 
-                        book_test_date(user, admin, db)
-                        print()
-                        print("Old user was registered for the Covid test!")
-                        print()
-                    except AccessControlException as e:
-                        print(e)
-                        print("Old user wasn`t registered for the Covid test!")
+                if not db.user_exists(user,role) and approve == 'y':
+                    db.add_user(user, role)    
+                try: 
+                    book_test_date(user, role, db)
+                    print()
+                    print("The user was registered for the Covid test!")
+                    print()
+                except AccessControlException as e:
+                    print(e)
             elif d.appointment=='2':
-                print("You recieved a new booking for vaccination!")
-                print()
-                print(f"User name: {d.name}" )
-                print(f"User age: {d.age}")
-                print(f"User CPR: {d.cpr_number}")
-                print()
-                user=User(d.name,d.age,d.cpr_number)
-                user.add_to_role(Role.Patient)
-                approve = input("If the personal data is corect? y/n : ")
-                if not db.user_exists(user,admin) and approve == 'y':
-                    try: 
-                        db.add_user(user, admin)
-                        booked_vaccination_date(user, admin, db)  
-                        print("New user was registered for the vaccination!")
-                        print()
-                        print("New user wasn`t registered for the vaccination!")
-                    except AccessControlException as e:
-                        print(e)
-                elif db.user_exists(user,admin) and approve == 'y':
-                    try: 
-                        booked_vaccination_date(user, admin, db)
-                        print()
-                        print("Old user was registered for the Covid test!")
-                        print()
-                        print("Old user wasn`t registered for the Covid test!")
-                    except AccessControlException as e:
-                        print(e)
-                       
-        db.print_database()   
-            
-            
-                
+                if not db.user_exists(user,role) and approve == 'y':
+                    db.add_user(user, role)
+                try: 
+                    booked_vaccination_date(user, role, db)
+                    print()
+                    print("The user was registered for the Covid test!")
+                except AccessControlException as e:
+                    print(e) 
+        db.print_database()                        
         print()
-        
-  
-    
-        
-   
-        
-        
-    
-        
-    
-        
-                     
-# result = subprocess.run([sys.executable, "-c"])
