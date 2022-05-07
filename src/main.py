@@ -128,7 +128,7 @@ def main():
             elif action == '3':
                 booking.booking()
                 booking.booking_approvement(admin, national_database)
-            elif action == '4':
+            elif action == '5':
                 infected = national_database.get_infected_count_last_7_days()
             elif action == 'quit':
                 break
