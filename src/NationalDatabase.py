@@ -48,7 +48,11 @@ class NationalDatabase():
 
     def add_user(self, user_to_add: User, responsable: User):
         responsable.check_access_control(Resource.Database, Access.Write)
-        self.database.append(DatabaseObject(user_to_add))
+        if not self.user_exists(user_to_add, responsable):
+            self.database.append(DatabaseObject(user_to_add))
+            print('User added successfully')
+            return True
+        return None
         
     def user_exists(self, user: User, responsible: User):
         responsible.check_access_control(Resource.Database, Access.Write)
@@ -58,16 +62,19 @@ class NationalDatabase():
                 print("User with this CPR already exists")
                 return True
         return False
-
     
-    def get_user_by_cpr(self, cpr: str) -> User:
+    def get_user_by_cpr(self, cpr: str, responsable: User) -> User:
+        if responsable.role == Role.Patient and cpr != responsable.cpr_number:
+            print('As a patient, you are allowed to check your own records only!')
+            return None
         for u in self.database:
             if u.cpr_number == cpr:
                 return u
         print('User does not exist')
-    
-    def add_booked_test_date(self, user:User, responsible: User, date: date = date.today()):     
-        responsible.check_access_control(Resource.PandemicTest, Access.Write)
+        return None
+
+    def add_booked_test_date(self, user:User, responsable: User, date: date = date.today()):     
+        responsable.check_access_control(Resource.PandemicTest, Access.Write)
         for record in self.database:
             if record.cpr_number == user.cpr_number:
                 record.new_test_date = date
@@ -98,6 +105,7 @@ class NationalDatabase():
         print("User not found in database")
         return False
 
+
     def add_test(self, user: User, responsable: User, test_result: TestResult,\
                     date: date = date.today()):
         responsable.check_access_control(Resource.PandemicTest, Access.Write)
@@ -106,6 +114,7 @@ class NationalDatabase():
                 record.is_tested = True
                 record.test_result = test_result
                 record.last_test_date = date
+                print("Test result added successfully!")
                 return True
         print("User not found in database")
         return False
@@ -133,9 +142,20 @@ class NationalDatabase():
         print("User not found in database")
         return None
 
-    def get_test_result(self, user: User) -> TestResult:
+    def get_db_entry_by_cpr(self, cpr: str, responsable: User):
+        responsable.check_access_control(Resource.Database, Access.Read)
         for record in self.database:
-            if record.cpr_number == user.cpr_number:
+            if record.cpr_number == cpr:
+                return record
+        print("User not found in database")
+        return None 
+
+    def get_test_result(self, patient: User, user: User) -> TestResult:
+        if user.role == Role.Patient and user.cpr_number != patient.cpr_number:
+            print('As a patient you can only check your own test result!')
+            return None
+        for record in self.database:
+            if record.cpr_number == patient.cpr_number:
                 return record.test_result
         print("User not found in database")
         return None
