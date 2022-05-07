@@ -31,18 +31,20 @@ class AccessControl():
             },
             Role.Doctor: {
                 Resource.VaccinationCertificate: Access.Write,
-                Resource.PandemicTest: Access.Write
+                Resource.PandemicTest: Access.Write,
+                Resource.Database: Access.Read
             },
             Role.Nurse: {
                 Resource.VaccinationCertificate: Access.Read,
-                Resource.PandemicTest: Access.Read
+                Resource.PandemicTest: Access.Write
             },
             Role.Researcher: {
                 Resource.VaccinationCertificate: Access.Read,
                 Resource.PandemicTest: Access.Read
             },
             Role.Patient: {
-                Resource.VaccinationCertificate: Access.Read
+                Resource.VaccinationCertificate: Access.Read,
+                Resource.PandemicTest: Access.Read
             }
         }
     
@@ -58,8 +60,7 @@ class AccessControl():
         for res, ac in self.access_list[Role.Admin].items():
             print(f'({res.value}) Read/{ac.name} {res.name}')
         print(f'({res.value + 1}) Booking')
-        print(f'({res.value + 2}) Add booking')
-        print(f'({res.value + 3}) Statistics')
+        print(f'({res.value + 2}) Statistics')
 
 
 class AccessControlException(Exception):

@@ -23,7 +23,7 @@ def main():
     researcher = User("Researcher", 30, "99996")
     researcher.add_to_role(Role.Researcher)
 
-    patient = User("Patient", 30, "99995")
+    patient = User("Patient", 30, "00002")
     patient.add_to_role(Role.Patient)
 
     DataMaker.populate_database(100, national_database)
@@ -49,7 +49,7 @@ def main():
         elif option == 'quit':
             break
         else:
-            print('Unknown commant')
+            print('Unknown command')
         while(True):
             access_control.print_all_actions()
             action = input('>')
@@ -61,7 +61,8 @@ def main():
                         print('Enter cpr for patient:')
                         cpr = input('>')
                         user = national_database.get_user_by_cpr(cpr, role)
-                        national_database.get_vaccination_certificate(user, role)
+                        if user is not None:
+                            national_database.get_vaccination_certificate(user, role)
                     elif ac == '1':             
                         print('Enter cpr for patient:')
                         cpr = input('>')
