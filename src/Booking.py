@@ -43,12 +43,14 @@ class Booking():
         
         self.data=[BookingObject(User(name,age,cpr_number),appointment)]
        
-    def booking_approvement(self, role: User, db:NationalDatabase):
-        if hasattr(self.data,'appointment')== False:
+    def booking_approvement(self, responsible: User, db:NationalDatabase):
+        
+        if not(responsible.role == Role.Doctor or responsible.role == Role.Admin) :
             print()
-            print('You have no new appointment!')
+            print("You have no access to this option!")
             print()
             return None
+        
         for d in self.data:
             print()
             print("You recieved a new booking for Covid test!")
@@ -61,20 +63,20 @@ class Booking():
             user.add_to_role(Role.Patient)
             approve = input("Is the personal data is corect? y/n : ")  
             if d.appointment=='1':
-                if not db.user_exists(user,role) and approve == 'y':
-                    db.add_user(user, role)    
+                if not db.user_exists(user,responsible) and approve == 'y':
+                    db.add_user(user, responsible)    
                 try: 
-                    book_test_date(user, role, db)
+                    book_test_date(user, responsible, db)
                     print()
                     print("The user was registered for the Covid test!")
                     print()
                 except AccessControlException as e:
                     print(e)
             elif d.appointment=='2':
-                if not db.user_exists(user,role) and approve == 'y':
-                    db.add_user(user, role)
+                if not db.user_exists(user,responsible) and approve == 'y':
+                    db.add_user(user, responsible)
                 try: 
-                    booked_vaccination_date(user, role, db)
+                    booked_vaccination_date(user, responsible, db)
                     print()
                     print("The user was registered for the Covid test!")
                 except AccessControlException as e:

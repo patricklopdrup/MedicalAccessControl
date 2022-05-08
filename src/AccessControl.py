@@ -59,8 +59,9 @@ class AccessControl():
     def print_all_actions(self):
         for res, ac in self.access_list[Role.Admin].items():
             print(f'({res.value}) Read/{ac.name} {res.name}')
-        print(f'({res.value + 1}) Booking')
-        print(f'({res.value + 2}) Statistics')
+        print(f'({res.value + 1}) Book a test/vaccination')
+        print(f'({res.value + 2}) Add Booking')
+        print(f'({res.value + 3}) Statistics')
 
 
 class AccessControlException(Exception):
