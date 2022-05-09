@@ -43,7 +43,7 @@ def main():
         elif option == '2':
             role = nurse
         elif option == '3':
-            role == researcher
+            role = researcher
         elif option == '4':
             role = patient
         elif option == 'quit':
