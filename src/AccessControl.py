@@ -51,6 +51,7 @@ class AccessControl():
     def print_io(self):
         print('(0) Read')
         print('(1) Write')
+        print('(quit) Quit')
     
     def print_roles(self):
         for role in self.access_list:
@@ -62,6 +63,8 @@ class AccessControl():
         print(f'({res.value + 1}) Book a test/vaccination')
         print(f'({res.value + 2}) Add Booking')
         print(f'({res.value + 3}) Statistics')
+        print(f'(quit) Quit')
+        
 
 
 class AccessControlException(Exception):
